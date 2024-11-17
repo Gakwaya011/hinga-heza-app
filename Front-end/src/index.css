@@ -2,3 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
+*{
+    font-family: Averta, Fallback, "Helvetica Neue", sans-serif;
+}

@@ -1,17 +1,22 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import Navbar from './components/navbar';
+import AppRouter from './AppRouter';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    console.log('User logged out');
+  };
 
   return (
-    <>
-    <div className="text-blue-500">Hello, Tailwind CSS!</div>
-   
-    </>
-  )
-}
+    <div>
+      {/* Pass login state and logout handler to Navbar */}
+      <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+      <AppRouter />
+    </div>
+  );
+};
 
-export default App
+export default App;
