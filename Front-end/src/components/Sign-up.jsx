@@ -1,26 +1,25 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
 import {
-  Button,
+  Grid,
+  Typography,
   TextField,
+  Button,
+  Divider,
   FormControl,
   InputLabel,
   OutlinedInput,
   InputAdornment,
   IconButton,
-  Typography,
   Link,
-  Divider,
-  Grid,
 } from '@mui/material';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-export default function SignUp({ setIsLoggedIn = () => {} }) {
+export default function SignUp({ onGoogleLogin }) {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -29,6 +28,7 @@ export default function SignUp({ setIsLoggedIn = () => {} }) {
     confirmPassword: '',
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -36,52 +36,57 @@ export default function SignUp({ setIsLoggedIn = () => {} }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    setError(''); // Clear error on input change
+    setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
     }
 
     try {
+      setLoading(true);
       const response = await axios.post('http://localhost:3000/api/auth/signup', formData);
       if (response.status === 201) {
         localStorage.setItem('token', response.data.token);
-        setIsLoggedIn(true);
-        navigate('/login');
+        navigate('/');
       }
     } catch (error) {
       console.error('Registration failed:', error);
       setError('Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleGoogleSignUp = async (response) => {
-    try {
-      console.log('Google sign-in response:', response);
-      const googleToken = response.credential;
-      if (!googleToken) {
-        setError('Google sign-in failed. Please try again.');
-        return;
+    console.log('Google response:', response); // Log the full response
+    if (response && response.credential) {
+      try {
+        setLoading(true);
+        const googleResponse = await axios.post('http://localhost:3000/api/auth/google', {
+          token: response.credential,
+        });
+        console.log('Google sign-up success:', googleResponse.data); 
+        // Log server response
+        localStorage.setItem('token', googleResponse.data.token);
+      
+        navigate('/'); // Redirect to the home page
+      } catch (error) {
+        console.error('Google sign-up failed:', error.message);
+        setError('Google sign-up failed. Please try again.');
+      } finally {
+        setLoading(false);
       }
-
-      const res = await axios.post('http://localhost:3000/api/auth/google', { token: googleToken });
-      if (res.status === 200) {
-        localStorage.setItem('token', res.data.token);
-        setIsLoggedIn(true);
-        navigate('/');
-      } else {
-        setError('Google sign-in returned an error. Please try again.');
-      }
-    } catch (error) {
-      console.error('Google sign-in failed:', error.response?.data || error.message);
-      setError('Google sign-in failed. Please try again.');
+    } else {
+      console.error('Google sign-up failed: No credential returned.');
+      setError('Google sign-up failed. Please try again.');
     }
   };
+  
+  
 
   return (
     <GoogleOAuthProvider clientId={clientId}>
@@ -227,6 +232,7 @@ export default function SignUp({ setIsLoggedIn = () => {} }) {
                 color="success"
                 fullWidth
                 style={{ marginTop: '1em' }}
+                disabled={loading}
               >
                 Sign Up
               </Button>
@@ -236,6 +242,7 @@ export default function SignUp({ setIsLoggedIn = () => {} }) {
                 onError={() => setError('Google sign-in failed. Please try again.')}
                 text="signup_with"
                 theme="outline"
+                disabled={loading}
                 style={{ width: '100%', marginTop: '1em' }}
               />
               <Typography variant="body2" style={{ marginTop: '1em', textAlign: 'center' }}>

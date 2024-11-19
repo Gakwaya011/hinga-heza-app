@@ -19,21 +19,21 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// Custom theme with colors that fit the Hinga Heza agricultural theme
+// Custom theme
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#4CAF50', // Green, symbolizing growth and agriculture
+      main: '#4CAF50', // Green for agriculture
     },
     secondary: {
       main: '#8BC34A', // Lighter green accent
     },
     background: {
-      default: '#f0f4f1', // Soft gray background for a clean look
-      paper: '#ffffff', // White background for form container
+      default: '#f0f4f1',
+      paper: '#ffffff',
     },
     text: {
-      primary: '#2e3b32', // Darker green text for readability
+      primary: '#2e3b32',
     },
   },
   typography: {
@@ -41,29 +41,43 @@ const theme = createTheme({
   },
 });
 
-function Login() {
+function Login({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
+  // Handles user login
   const handleLogin = async (e) => {
     e.preventDefault();
+    setErrorMessage(''); // Clear previous error message
+
     try {
       const response = await axios.post('http://localhost:3000/api/auth/login', {
         email,
         password,
       });
 
-      
+      // Store token and login status in localStorage
       localStorage.setItem('token', response.data.token);
-      navigate('/'); 
+      localStorage.setItem('isLoggedIn', 'true');
+
+      // Update login state in App.jsx
+      onLogin();
+
+      // Redirect to homepage after login
+      navigate('/');
     } catch (error) {
-      setErrorMessage('Login failed. Please check your credentials.');
+      const message =
+        error.response && error.response.status === 401
+          ? 'Incorrect email or password. Please try again.'
+          : 'Login failed. Please check your credentials.';
+      setErrorMessage(message);
     }
   };
 
+  // Toggle password visibility
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => event.preventDefault();
 
@@ -90,8 +104,11 @@ function Login() {
             textAlign: 'center',
           }}
         >
-          <Typography variant="h5" component="h1" color="primary" mb={3}>
-            Sign In
+          <Typography variant="h4" component="h1" color="primary" mb={3} fontWeight="bold">
+            Welcome Back to Hinga Heza
+          </Typography>
+          <Typography variant="body1" mb={3} color="text.primary">
+            Sign in to explore available agricultural lands and connect with landowners.
           </Typography>
           {errorMessage && (
             <Typography color="error" mb={2}>
@@ -158,10 +175,20 @@ function Login() {
           >
             Sign In
           </Button>
-          <Link href="/signup" variant="body2" color="secondary" sx={{ textAlign: 'center', display: 'block', mb: 1 }}>
+          <Link
+            href="/signup"
+            variant="body2"
+            color="secondary"
+            sx={{ textAlign: 'center', display: 'block', mb: 1, fontWeight: 'bold' }}
+          >
             Don’t have an account? Sign up
           </Link>
-          <Link href="/" variant="body2" color="secondary" sx={{ textAlign: 'center', display: 'block' }}>
+          <Link
+            href="/"
+            variant="body2"
+            color="secondary"
+            sx={{ textAlign: 'center', display: 'block', fontWeight: 'bold' }}
+          >
             Forgot password?
           </Link>
         </Box>

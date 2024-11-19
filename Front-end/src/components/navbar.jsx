@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { Menu, X, LogIn, LogOut, Info, Mail, Home as HomeIcon } from 'react-feather';
+import {
+  Menu as MenuIcon,
+  Close as CloseIcon,
+  Login as LoginIcon,
+  Logout as LogoutIcon,
+  Info as InfoIcon,
+  ContactMail as ContactIcon,
+  Home as HomeIcon,
+  NaturePeople as LandIcon,
+} from '@mui/icons-material';
 
 const Navbar = ({ isLoggedIn, onLogout }) => {
   const location = useLocation();
@@ -31,16 +40,16 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-6">
           <Link to="/" className="flex items-center text-gray-800 hover:text-green-600">
-            <HomeIcon className="mr-2" size={16} /> Home
-          </Link>
-          <Link to="/about" className="flex items-center text-gray-800 hover:text-green-600">
-            <Info className="mr-2" size={16} /> About
-          </Link>
-          <Link to="/contact" className="flex items-center text-gray-800 hover:text-green-600">
-            <Mail className="mr-2" size={16} /> Contact Us
+            <HomeIcon className="mr-2" /> Home
           </Link>
           <Link to="/available-land" className="flex items-center text-gray-800 hover:text-green-600">
-            <Info className="mr-2" size={16} /> Available Land
+            <LandIcon className="mr-2" /> Available Land
+          </Link>
+          <Link to="/about" className="flex items-center text-gray-800 hover:text-green-600">
+            <InfoIcon className="mr-2" /> About
+          </Link>
+          <Link to="/contact" className="flex items-center text-gray-800 hover:text-green-600">
+            <ContactIcon className="mr-2" /> Contact Us
           </Link>
         </nav>
 
@@ -51,21 +60,21 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
               onClick={onLogout}
               className="flex items-center bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
             >
-              <LogOut className="mr-2" size={16} /> Logout
+              <LogoutIcon className="mr-2" /> Logout
             </button>
           ) : (
             <Link
               to="/login"
               className="flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             >
-              <LogIn className="mr-2" size={16} /> Login
+              <LoginIcon className="mr-2" /> Login
             </Link>
           )}
         </div>
 
         {/* Mobile Menu Button */}
         <button className="md:hidden flex items-center text-gray-800" onClick={toggleMenu}>
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          {isMenuOpen ? <CloseIcon /> : <MenuIcon />}
         </button>
       </div>
 
@@ -75,22 +84,26 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
           <ul className="space-y-4 px-4 py-6">
             <li>
               <Link to="/" className="flex items-center text-gray-800 hover:text-green-600" onClick={toggleMenu}>
-                <HomeIcon className="mr-2" size={16} /> Home
+                <HomeIcon className="mr-2" /> Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/available-land"
+                className="flex items-center text-gray-800 hover:text-green-600"
+                onClick={toggleMenu}
+              >
+                <LandIcon className="mr-2" /> Available Land
               </Link>
             </li>
             <li>
               <Link to="/about" className="flex items-center text-gray-800 hover:text-green-600" onClick={toggleMenu}>
-                <Info className="mr-2" size={16} /> About
+                <InfoIcon className="mr-2" /> About
               </Link>
             </li>
             <li>
               <Link to="/contact" className="flex items-center text-gray-800 hover:text-green-600" onClick={toggleMenu}>
-                <Mail className="mr-2" size={16} /> Contact Us
-              </Link>
-            </li>
-            <li>
-              <Link to="/available-land" className="flex items-center text-gray-800 hover:text-green-600" onClick={toggleMenu}>
-                <Info className="mr-2" size={16} /> Available Land
+                <ContactIcon className="mr-2" /> Contact Us
               </Link>
             </li>
             <li>
@@ -102,7 +115,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                   }}
                   className="flex items-center bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 w-full"
                 >
-                  <LogOut className="mr-2" size={16} /> Logout
+                  <LogoutIcon className="mr-2" /> Logout
                 </button>
               ) : (
                 <Link
@@ -110,7 +123,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
                   className="flex items-center bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
                   onClick={toggleMenu}
                 >
-                  <LogIn className="mr-2" size={16} /> Login
+                  <LoginIcon className="mr-2" /> Login
                 </Link>
               )}
             </li>
