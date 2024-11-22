@@ -3,20 +3,24 @@ const cors = require('cors');
 const authRoutes = require('./routes/auth');
 require('dotenv').config();
 const sequelize = require("./config/db.config");
+const landRoutes = require('./routes/landRoutes');
+const bodyParser = require('body-parser');
 
 const app = express();
 
 //Middleware to set headers for all responses
-app.use((req, res, next) => {
-    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
-    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
-    next();
-  });
+// app.use((req, res, next) => {
+//     res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+//     res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+//     next();
+//   });
   
 
 app.use(cors());
-app.use(express.json());
+
+app.use(bodyParser.json());
 app.use('/api/auth', authRoutes);
+app.use('/api', landRoutes);
 
 
 

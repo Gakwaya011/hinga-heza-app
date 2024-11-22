@@ -21,7 +21,7 @@ router.post('/google', async (req, res) => {
     const { email, name } = payload;
 
     // Add your user registration or login logic here
-    res.status(200).json({ token: 'your_jwt_token_here' });
+    res.status(200).json({ token: process.env.JWT_SECRET });
   } catch (error) {
     console.error('Error verifying Google token:', error);
     res.status(500).json({ error: 'Internal server error' });
