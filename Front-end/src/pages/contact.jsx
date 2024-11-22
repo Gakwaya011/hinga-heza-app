@@ -1,11 +1,19 @@
-import React from 'react';
+import React from "react";
+import ContactHero from "../components/ContactHero";
+import ContactForm from "../components/ContactForm";
+import ContactDetails from "../components/ContactDetails";
+import Footer from "../components/Footer";
 
-const Contact = () => (
-  <div className="p-8">
-    <h1 className="text-2xl font-bold mb-4">Contact Us</h1>
-    <p>Email: support@hingaheza.com</p>
-    <p>Phone: +250 123 456 789</p>
-  </div>
-);
+const ContactPage = () => {
+  return (
+    <div>
+      <ContactHero />
+      <ContactForm />
+      <ContactDetails />
+      <Footer />
+    </div>
+  );
+};
 
-export default Contact;
+export default ContactPage;
+

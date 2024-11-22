@@ -16,7 +16,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Paths where the navbar should be hidden
-  const hiddenPaths = ['/login', '/signup'];
+  const hiddenPaths = ['/login', '/signup','/admin'];
 
   // Check if the current path is in the hiddenPaths array
   if (hiddenPaths.includes(location.pathname)) {

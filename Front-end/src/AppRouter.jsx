@@ -6,7 +6,9 @@ import SignUp from "./components/Sign-up";
 import About from "./pages/about";
 import Contact from "./pages/contact";
 import AvailableLand from "./pages/availableland";
-import BlogPostPage from './pages/BlogPostPage'
+import BlogPostPage from './pages/BlogPostPage';
+import AdminDashboard from './pages/AdminDashboard'
+
 import NotFound from "./pages/NotFound"; // Create a NotFound page for 404s
 
 // Reusable ProtectedRoute Component
@@ -36,6 +38,7 @@ const AppRouter = ({ isLoggedIn, onLogin, onGoogleLogin }) => {
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/blog" element={<BlogPostPage />} />
+      <Route path="/admin" element={<AdminDashboard />} />
 
       {/* Protected Routes */}
       <Route
@@ -43,6 +46,7 @@ const AppRouter = ({ isLoggedIn, onLogin, onGoogleLogin }) => {
         element={
           <ProtectedRoute isLoggedIn={isLoggedIn}>
             <AvailableLand />
+          
           </ProtectedRoute>
         }
       />
