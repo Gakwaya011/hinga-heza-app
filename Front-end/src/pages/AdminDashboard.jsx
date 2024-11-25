@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, CssBaseline } from "@mui/material";
 import Sidebar from "../components/Sidebar";
 import TopBar from "../components/TopBar";
 import StatsOverview from "../components/StatsOverview";
@@ -9,17 +9,20 @@ import Footer from "../components/FooterAdmin";
 
 const AdminDashboard = () => {
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", minHeight: "100vh" }}>
+      {/* Reset CSS Baseline */}
+      <CssBaseline />
+
       {/* Sidebar */}
       <Sidebar />
 
-      {/* Main Content */}
-      <Box sx={{ flexGrow: 1 }}>
+      {/* Main Content Area */}
+      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
         {/* TopBar */}
         <TopBar />
 
         {/* Dashboard Content */}
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ flexGrow: 1, p: 3, bgcolor: "#f4f5f7" }}>
           <StatsOverview />
           <LandManagement />
           <UserManagement />

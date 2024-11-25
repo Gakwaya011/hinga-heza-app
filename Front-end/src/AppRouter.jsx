@@ -8,6 +8,8 @@ import Contact from "./pages/contact";
 import AvailableLand from "./pages/availableland";
 import BlogPostPage from './pages/BlogPostPage';
 import AdminDashboard from './pages/AdminDashboard'
+import ManageLandsPage from "./pages/ManageLandsPage";
+import ManageUsersPage from "./pages/ManageUsersPage";
 
 import NotFound from "./pages/NotFound"; // Create a NotFound page for 404s
 
@@ -39,6 +41,8 @@ const AppRouter = ({ isLoggedIn, onLogin, onGoogleLogin }) => {
       <Route path="/contact" element={<Contact />} />
       <Route path="/blog" element={<BlogPostPage />} />
       <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/admin/manage-lands" element={<ManageLandsPage />} />
+      <Route path="/admin/manage-users" element={<ManageUsersPage />} />
 
       {/* Protected Routes */}
       <Route
