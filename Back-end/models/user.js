@@ -1,11 +1,10 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/db.config');
+const sequelize = require('../config/db.config');  // Ensure proper connection import
 
 const User = sequelize.define('User', {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    
   },
   password: {
     type: DataTypes.STRING,
@@ -17,7 +16,7 @@ const User = sequelize.define('User', {
   },
 }, {
   timestamps: true,
-  tableName: 'users',
+  tableName: 'users',  // Explicitly specify table name
 });
 
 module.exports = User;

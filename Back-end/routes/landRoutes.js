@@ -1,21 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const authenticateAdmin = require('../middleware/authenticateAdmin');
-const {
-    createLand,
-    getAllLands,
-    createLandListing,
-    updateLandListing,
-    deleteLandListing
-} = require('../controllers/landController');
+const landController = require('../controllers/landController');  
 
-// Land routes
-router.post('/lands', createLand);
-router.get('/lands', getAllLands);
+const { authenticateAdmin } = require('../middleware/authenticateAdmin');
 
-// LandListing routes
-router.post('/landlistings',authenticateAdmin, createLandListing);
-router.put('/landlistings/:id',authenticateAdmin, updateLandListing);
-router.delete('/landlistings/:id', deleteLandListing);
+// POST create a new land
+router.post('/lands',authenticateAdmin, landController.createLand);
+
+// GET all lands with listings
+router.get('/lands', landController.getAllLands);
+
+// PUT update a land by id
+router.put('/lands/:id',authenticateAdmin, landController.updateLand);
+
+// DELETE a land by id
+router.delete('/lands/:id',authenticateAdmin, landController.deleteLand);
+
+// POST create a new land listing
+router.post('/listings',authenticateAdmin, landController.createLandListing);
+
+// PUT update a land listing
+router.put('/listings/:id',authenticateAdmin, landController.updateLandListing);
+
+// DELETE a land listing
+router.delete('/listings/:id',authenticateAdmin, landController.deleteLandListing);
 
 module.exports = router;
