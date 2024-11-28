@@ -48,7 +48,7 @@ export default function SignUp({ onGoogleLogin }) {
 
     try {
       setLoading(true);
-      const response = await axios.post('http://localhost:3000/api/auth/signup', formData);
+      const response = await axios.post('https://hinga-heza-app-1.onrender.com/api/auth/signup', formData);
       if (response.status === 201) {
         localStorage.setItem('token', response.data.token);
         navigate('/');
@@ -66,7 +66,7 @@ export default function SignUp({ onGoogleLogin }) {
     if (response && response.credential) {
       try {
         setLoading(true);
-        const googleResponse = await axios.post('http://localhost:3000/api/auth/google', {
+        const googleResponse = await axios.post('https://hinga-heza-app-1.onrender.com/api/auth/google', {
           token: response.credential,
         });
         console.log('Google sign-up success:', googleResponse.data); 

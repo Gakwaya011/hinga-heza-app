@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api', // Adjust the URL as needed
+  baseURL: 'https://hinga-heza-app-1.onrender.com/api', // Adjust the URL as needed
 });
 
 export const getLands = async () => {

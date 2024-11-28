@@ -54,7 +54,7 @@ function Login({ onLogin }) {
     setErrorMessage(''); // Clear previous error message
 
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', {
+      const response = await axios.post('https://hinga-heza-app-1.onrender.com/api/auth/login', {
         email,
         password,
       });
