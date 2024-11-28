@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 
 // Use routes
 app.use('/api/auth', authRoutes);
-app.use('/api', landRoutes); // Make sure the land routes are used
+app.use('/api/lands', landRoutes); // Make sure the land routes are used
 
 
 app.get('/', (req, res) => {

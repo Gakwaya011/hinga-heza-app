@@ -1,4 +1,4 @@
-const Land = require('../models/land');
+
 const LandListing = require('../models/LandListing');
 
 // Create a new land

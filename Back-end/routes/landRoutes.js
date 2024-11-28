@@ -1,28 +1,39 @@
 const express = require('express');
 const router = express.Router();
-const landController = require('../controllers/landController');  
+const Land = require("../models/Land"); // Assuming you have a Land model defined with Sequelize
+const User = require("../models/user"); // Assuming you have a User model defined with Sequelize
 
-const { authenticateAdmin } = require('../middleware/authenticateAdmin');
+// GET all lands
+router.get("/", async (req, res) => {
+  try {
+    const lands = await Land.findAll(); // Sequelize query to find all lands
+    res.json(lands);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
-// POST create a new land
-router.post('/lands',authenticateAdmin, landController.createLand);
+// DELETE a land by ID
+router.delete("/:id", async (req, res) => {
+  try {
+    const land = await Land.findByPk(req.params.id); // Sequelize query to find land by ID
+    if (!land) return res.status(404).send("Land not found");
 
-// GET all lands with listings
-router.get('/lands', landController.getAllLands);
+    await land.destroy(); // Sequelize method to delete the land
+    res.json({ message: "Land deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
-// PUT update a land by id
-router.put('/lands/:id',authenticateAdmin, landController.updateLand);
-
-// DELETE a land by id
-router.delete('/lands/:id',authenticateAdmin, landController.deleteLand);
-
-// POST create a new land listing
-router.post('/listings',authenticateAdmin, landController.createLandListing);
-
-// PUT update a land listing
-router.put('/listings/:id',authenticateAdmin, landController.updateLandListing);
-
-// DELETE a land listing
-router.delete('/listings/:id',authenticateAdmin, landController.deleteLandListing);
+// GET all users
+router.get("/users", async (req, res) => {
+  try {
+    const users = await User.findAll(); // Sequelize query to find all users
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 module.exports = router;
