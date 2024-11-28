@@ -43,3 +43,10 @@ const PORT = process.env.PORT || 5000;
         process.exit(1); // Exit the process if there's a critical error
     }
 })();
+sequelize.sync({ alter: true })
+  .then(() => {
+    console.log("User table synced successfully!");
+  })
+  .catch((err) => {
+    console.error("Error syncing User table:", err);
+  });

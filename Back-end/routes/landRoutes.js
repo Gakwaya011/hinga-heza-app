@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Land = require("../models/Land"); // Assuming you have a Land model defined with Sequelize
+const Land = require("../models/land"); // Assuming you have a Land model defined with Sequelize
 const User = require("../models/user"); // Assuming you have a User model defined with Sequelize
 
 // GET all lands
