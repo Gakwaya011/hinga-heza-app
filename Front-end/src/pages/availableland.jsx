@@ -30,7 +30,7 @@ const AvailableLands = () => {
       price: 1000000,
       location: "Kigali",
       hectares: 5,
-      image: "https://www.quick.rw/wp-content/uploads/classified-listing/2024/04/PLOT-for-sale-12-1170x650.webp?v=1711963814",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjY_RIgbAmcV1IqkO1A0sR1k3M040PorAOjsMoofevi7UPeps4ZrBor5kuD_nQfOSCWZs&usqp=CAU",
       soilFertility: "High",
       soilPH: "6.5",
       waterAvailability: "Abundant",
