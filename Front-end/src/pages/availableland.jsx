@@ -16,6 +16,11 @@ import {
 import { motion } from "framer-motion";
 
 const AvailableLands = () => {
+  const [search, setSearch] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedLand, setSelectedLand] = useState(null);
+
   const lands = [
     {
       id: 1,
@@ -24,6 +29,7 @@ const AvailableLands = () => {
         "Fertile land with high soil quality, pH 6.5, good water availability.",
       price: 1000000,
       location: "Kigali",
+      hectares: 5,
       image: "https://www.quick.rw/wp-content/uploads/classified-listing/2024/04/PLOT-for-sale-12-1170x650.webp?v=1711963814",
       soilFertility: "High",
       soilPH: "6.5",
@@ -38,6 +44,7 @@ const AvailableLands = () => {
       description: "Land near the lake, ideal for agriculture.",
       price: 2000000,
       location: "Gisenyi",
+      hectares: 2,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzabqLe0EQcDqX72r6W07CPYIUntH8IO0hnA&s",
       soilFertility: "High",
       soilPH: "6.2",
@@ -51,6 +58,7 @@ const AvailableLands = () => {
       description: "Land near the lake, ideal for agriculture.",
       price: 2200000,
       location: "Muhanga",
+      hectares: 4,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiPwV3J4RnI3M0mhsAinCnzAzjt9bu9o59Vg&s",
       soilFertility: "High",
       soilPH: "6.2",
@@ -64,6 +72,7 @@ const AvailableLands = () => {
       description: "Expansive savanna, perfect for cattle ranching..",
       price: 1100000,
       location: "Nyaruguru",
+      hectares: 3,
       image: "https://plutproperties.com/wp-content/uploads/2024/01/land-for-sale-in-Kicukiro-3.jpg",
       soilFertility: "High",
       soilPH: "6.2",
@@ -77,6 +86,7 @@ const AvailableLands = () => {
       description: "Sandy soil near the coast, ideal for pineapple cultivation.",
       price: 1000000,
       location: "Ngororero",
+      hectares: 6,
       image: "https://www.houseinrwanda.com/sites/default/files/styles/large/public/2021-11/niws.jpg?itok=8Qd12wDA",
       soilFertility: "High",
       soilPH: "6.2",
@@ -90,6 +100,7 @@ const AvailableLands = () => {
       description: "Land near the swamps, ideal for agriculture.",
       price: 2200000,
       location: "Ruhango",
+      hectares: 3,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyMUsd770u7EMh9DfjyBA_yGJQRHw8MvWkMA&s",
       soilFertility: "High",
       soilPH: "6.2",
@@ -103,6 +114,7 @@ const AvailableLands = () => {
       description: "Fertile plains with rich soil, perfect for growing crops.",
       price: 2200000,
       location: "Nyagatare",
+      hectares: 5,
       image: "https://5.imimg.com/data5/JR/VB/MK/SELLER-98421711/agricultural-land-for-sale-at-apte-village-taluka-panvel-dist-raigad-500x500.jpg",
       soilFertility: "High",
       soilPH: "6.2",
@@ -116,6 +128,7 @@ const AvailableLands = () => {
       description: "Hilly terrain with scenic views, suitable for tea farming..",
       price: 2200000,
       location: "Gasabo",
+      hectares: 4,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ61zsO8EHiyJ684iKZ5lZxrhyhaQwXD8PMfQ&s",
       soilFertility: "medium",
       soilPH: "6.2",
@@ -129,6 +142,7 @@ const AvailableLands = () => {
       description: "Land near the lake, ideal for agriculture.",
       price: 1200000,
       location: "Musanze",
+      hectares: 5,
       image: "https://www.fao.org/typo3temp/pics/63b574d328.jpg",
       soilFertility: "High",
       soilPH: "6.2",
@@ -142,6 +156,7 @@ const AvailableLands = () => {
       description: "A spacious plot with a mix of open fields and forest, ideal for livestock grazing.",
       price: 2300000,
       location: "Ngororero",
+      hectares: 5,
       image: "https://www.researchgate.net/publication/257805470/figure/fig1/AS:297495486844933@1447939859721/A-view-of-terraced-hills-in-Rwanda-The-adoption-of-sustainable-land-management-practices.png",
       soilFertility: "High",
       soilPH: "5.2",
@@ -154,6 +169,7 @@ const AvailableLands = () => {
       description: "Land near the lake, ideal for agriculture.",
       price: 2200000,
       location: "Gisenyi",
+      hectares: 8,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmmyvxk5NogUjKZJiLIhxia4TJTB3Dl9xnww&s",
       soilFertility: "High",
       soilPH: "6.2",
@@ -167,6 +183,7 @@ const AvailableLands = () => {
       description: "High-altitude land with cool temperatures, perfect for coffee plantations.",
       price: 2100000,
       location: "Musanze",
+      hectares: 5,
       image: "https://rwandadispatch.com/wp-content/uploads/2024/09/Terracing.jpg",
       soilFertility: "High",
       soilPH: "6.2",
@@ -180,6 +197,7 @@ const AvailableLands = () => {
       description: "Sun-drenched fields with irrigation access, suitable for vegetable farming.",
       price: 2200000,
       location: "Ruhango",
+      hectares: 5,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLXNkK5J4dQCrrp9QFlY6rls2dGyLD9WYIVQ&s",
       soilFertility: "medium",
       soilPH: "4.2",
@@ -193,6 +211,7 @@ const AvailableLands = () => {
       description: "Sun-drenched fields with irrigation access, suitable for vegetable farming",
       price: 1700000,
       location: "Kicukiro",
+      hectares: 6,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0jXB_1EiZHKEe_64HwxXFGPWR-UeMMt1OmQ&s",
       soilFertility: "low",
       soilPH: "6.2",
@@ -206,6 +225,7 @@ const AvailableLands = () => {
       description: "Land bordered by natural springs, ideal for organic farming..",
       price: 1600000,
       location: "Nyagatare",
+      hectares: 7,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIx2Q7oGxZUMvay7B06eTJGswz3cSwoMCPYg&s",
       soilFertility: "High",
       soilPH: "6.2",
@@ -219,6 +239,7 @@ const AvailableLands = () => {
       description: "Land near the lake, ideal for agriculture.",
       price: 2900000,
       location: "Nyaruguru",
+      hectares: 4,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRbp_xh1PCLwRt_eJAsCz4BHyVw4IDDWPERA&s",
       soilFertility: "High",
       soilPH: "6.2",
@@ -232,6 +253,7 @@ const AvailableLands = () => {
       description: "Land near the lake, ideal for agriculture.",
       price: 2200000,
       location: "Gisenyi",
+      hectares: 7,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrSLcMAaUsb9YCiKzRDe3udNBQuzccagPKiA&s",
       soilFertility: "High",
       soilPH: "6.2",
@@ -245,6 +267,7 @@ const AvailableLands = () => {
       description: "Land near the lake, ideal for agriculture.",
       price: 2200000,
       location: "Muhanga",
+      hectares: 8,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrSLcMAaUsb9YCiKzRDe3udNBQuzccagPKiA&s",
       soilFertility: "High",
       soilPH: "6.2",
@@ -258,6 +281,7 @@ const AvailableLands = () => {
       description: "Land near the lake, ideal for agriculture.",
       price: 2100000,
       location: "Nyagatare",
+      hectares: 9,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrSLcMAaUsb9YCiKzRDe3udNBQuzccagPKiA&s",
       soilFertility: "High",
       soilPH: "6.2",
@@ -271,6 +295,7 @@ const AvailableLands = () => {
       description: "Land near the lake, ideal for agriculture.",
       price: 2000000,
       location: "Gisenyi",
+      hectares: 9,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0wTckHhGAug5Md_JHCBidP-9Ix9_zBmQ0nA&s",
       soilFertility: "High",
       soilPH: "6.2",
@@ -284,6 +309,7 @@ const AvailableLands = () => {
       description: "Land near the lake, ideal for agriculture.",
       price: 2000000,
       location: "Nyaruguru",
+      hectares: 3,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmSCJYz3CqMFH_AJVBOaDgOGAGW49F1zelsQ&s",
       soilFertility: "High",
       soilPH: "6.2",
@@ -297,6 +323,7 @@ const AvailableLands = () => {
       description: "Land near the lake, ideal for agriculture.",
       price: 1200000,
       location: "Muhanga",
+      hectares: 5,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRClW1BAk1iK1KnQ7lZay4U7wlLQe7xjU3jcQ&s",
       soilFertility: "High",
       soilPH: "6.2",
@@ -310,6 +337,7 @@ const AvailableLands = () => {
       description: "Land near the lake, ideal for agriculture.",
       price: 3200000,
       location: "Nyagatare",
+      hectares: 5,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgEc71ru4N_Gmg-Kh471S5g8E_nHzznQ17Vg&s",
       soilFertility: "High",
       soilPH: "6.2",
@@ -323,6 +351,7 @@ const AvailableLands = () => {
       description: "Land near the lake, ideal for agriculture.",
       price: 6200000,
       location: "Gisenyi",
+      hectares: 7,
       image: "https://plutproperties.com/wp-content/uploads/2022/08/Land-for-sale-in-Bugesera-1.jpg",
       soilFertility: "High",
       soilPH: "6.2",
@@ -336,6 +365,7 @@ const AvailableLands = () => {
       description: "Land near the lake, ideal for agriculture.",
       price: 5200000,
       location: "Gisenyi",
+      hectares: 6,
       image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXOpfDX_7k3H4h4lMezA2wH0MS20Ej0OPq0w&s",
       soilFertility: "High",
       soilPH: "6.2",
@@ -344,27 +374,14 @@ const AvailableLands = () => {
     },
   ];
 
-  const [search, setSearch] = useState("");
-  const [locationFilter, setLocationFilter] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [selectedLand, setSelectedLand] = useState(null);
-  const itemsPerPage = 6;
-
-  const filteredLands = lands.filter(
+  const displayedLands = lands.filter(
     (land) =>
       land.title.toLowerCase().includes(search.toLowerCase()) &&
-      (locationFilter ? land.location === locationFilter : true)
+      (locationFilter === "" || land.location === locationFilter)
   );
 
-  const totalPages = Math.ceil(filteredLands.length / itemsPerPage);
-  const displayedLands = filteredLands.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  const handlePageChange = (event, value) => {
-    setCurrentPage(value);
-  };
+  const totalPages = Math.ceil(displayedLands.length / 6);
+  const handlePageChange = (_, page) => setCurrentPage(page);
 
   return (
     <Box sx={{ p: 4, backgroundColor: "#f9f9f9", minHeight: "100vh" }}>
@@ -470,6 +487,7 @@ const AvailableLands = () => {
                     RWF {land.price.toLocaleString()}
                   </Typography>
                   <Typography variant="body2">Phone: {land.phoneNumber}</Typography>
+                  <Typography variant="body2">Area: {land.hectares} hectares</Typography> {/* Displaying hectares */}
                 </CardContent>
               </Card>
             </motion.div>
@@ -516,6 +534,9 @@ const AvailableLands = () => {
             </Typography>
             <Typography variant="body2">
               <strong>Crop History:</strong> {selectedLand.cropHistory}
+            </Typography>
+            <Typography variant="body2">
+              <strong>Area:</strong> {selectedLand.hectares} hectares {/* Displaying hectares in the dialog */}
             </Typography>
             <Button
               variant="contained"
