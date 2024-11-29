@@ -9,7 +9,9 @@ const bodyParser = require('body-parser');
 const app = express();
 
 // Middleware
-app.use(cors());
+const cors = require('cors');
+app.use(cors({ origin: 'https://hinga-heza.netlify.app' })); 
+
 app.use(express.json());
 app.use(bodyParser.json());
 
