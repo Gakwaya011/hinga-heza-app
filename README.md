@@ -35,31 +35,30 @@ MySQL
 Backend Setup:
 Clone the repository and navigate to the backend folder:
 
-bash
-Copy code
+
+
 git clone https://github.com/Gakwaya011/hinga-heza-app.git
 cd backend
 Install dependencies:
 
-bash
-Copy code
+
+
 npm install
 
 
 
-bash
-Copy code
+
 npx sequelize-cli db:migrate
 Start the backend server:
 
-bash
-Copy code
+
+
 npm start
 Frontend Setup:
 Navigate to the frontend folder:
 
-bash
-Copy code
+
+
 cd frontend
 Install dependencies:
 
@@ -73,7 +72,7 @@ Copy code
 VITE_API_URL=http://localhost:3000
 Start the development server:
 
-bash
+
 Copy code
 npm run dev
 Deployment
