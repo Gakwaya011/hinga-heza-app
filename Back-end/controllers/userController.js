@@ -9,9 +9,22 @@ const registerUser = async (req, res) => {
 
   try {
     // Validate inputs
-    if (!username || !email || !password || password.length < 6) {
+    if (!username || !email || !password) {
       return res.status(400).json({
-        error: 'Username, email, and password are required. Password must be at least 6 characters long.',
+        error: 'Username, email, and password are required.',
+      });
+    }
+    if (password.length < 6) {
+      return res.status(400).json({
+        error: 'Password must be at least 6 characters long.',
+      });
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({
+        error: 'Email is already in use.',
       });
     }
 
@@ -31,7 +44,7 @@ const registerUser = async (req, res) => {
       user: { id: newUser.id, username: newUser.username, email: newUser.email, role: newUser.role },
     });
   } catch (error) {
-    console.error("Registration Error:", error);
+    console.error('Registration Error:', error);
     const errorMessage = error?.errors?.[0]?.message || 'Error registering user';
     res.status(500).json({ error: errorMessage });
   }
@@ -60,9 +73,10 @@ const loginUser = async (req, res) => {
     }
 
     // Generate a JWT
-    const secret = process.env.JWT_SECRET || 'default_secret'; // Fallback if JWT_SECRET is not set
-    if (secret === 'default_secret') {
-      console.warn('Warning: Using default JWT_SECRET. Please set the JWT_SECRET environment variable.');
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      console.warn('Warning: JWT_SECRET environment variable is not set');
+      return res.status(500).json({ error: 'Server configuration error: JWT_SECRET is missing' });
     }
 
     const token = jwt.sign(
@@ -77,8 +91,8 @@ const loginUser = async (req, res) => {
       user: { id: user.id, username: user.username, email: user.email, role: user.role },
     });
   } catch (error) {
-    console.error("Login Error:", error);
-    res.status(500).json({ error: 'Login error' });
+    console.error('Login Error:', error);
+    res.status(500).json({ error: 'Login error: ' + error.message });
   }
 };
 
@@ -109,9 +123,14 @@ const googleSignUp = async (req, res) => {
     }
 
     // Generate JWT for the user (optional, you can decide if needed)
+    const jwtSecret = process.env.JWT_SECRET || 'default_secret';
+    if (jwtSecret === 'default_secret') {
+      console.warn('Warning: Using default JWT_SECRET. Please set the JWT_SECRET environment variable.');
+    }
+
     const token = jwt.sign(
       { id: user.id, role: user.role },
-      process.env.JWT_SECRET || 'default_secret',
+      jwtSecret,
       { expiresIn: '1h' }
     );
 
@@ -121,7 +140,7 @@ const googleSignUp = async (req, res) => {
       token,
     });
   } catch (error) {
-    console.error("Google Sign-Up Error:", error);
+    console.error('Google Sign-Up Error:', error);
     res.status(400).json({ error: 'Google sign-up failed: ' + error.message });
   }
 };
