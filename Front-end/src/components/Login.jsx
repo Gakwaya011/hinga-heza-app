@@ -54,12 +54,14 @@ function Login({ onLogin }) {
     setErrorMessage(''); // Clear previous error message
 
     try {
+      console.log('Logging in with email:', email); // Log the email being used
       const response = await axios.post('https://hinga-heza-app-1.onrender.com/api/auth/login', {
         email,
         password,
       });
 
       // Store token and login status in localStorage
+      console.log('Login successful, storing token');
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('isLoggedIn', 'true');
 
@@ -69,6 +71,7 @@ function Login({ onLogin }) {
       // Redirect to homepage after login
       navigate('/');
     } catch (error) {
+      console.error('Login error:', error); // Log error to console for better debugging
       const message =
         error.response && error.response.status === 401
           ? 'Incorrect email or password. Please try again.'
