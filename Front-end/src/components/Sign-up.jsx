@@ -7,7 +7,7 @@ import {
   Typography,
   TextField,
   Button,
-  Divider,  
+  Divider,
   FormControl,
   InputLabel,
   OutlinedInput,
@@ -19,7 +19,11 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
-export default function SignUp({ onGoogleLogin }) {
+if (!clientId) {
+  console.warn('Google Client ID is not defined in the environment variables.');
+}
+
+export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -31,12 +35,12 @@ export default function SignUp({ onGoogleLogin }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    setError('');
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setError(''); // Clear error on input change
   };
 
   const handleSubmit = async (e) => {
@@ -48,64 +52,59 @@ export default function SignUp({ onGoogleLogin }) {
 
     try {
       setLoading(true);
-      const response = await axios.post('https://hinga-heza-app-1.onrender.com/api/auth/signup', formData);
+      const response = await axios.post(
+        'https://hinga-heza-app-1.onrender.com/api/auth/signup',
+        formData
+      );
       if (response.status === 201) {
         localStorage.setItem('token', response.data.token);
-        navigate('/');
+        navigate('/'); // Redirect to homepage
       }
     } catch (error) {
       console.error('Registration failed:', error);
-      setError('Registration failed. Please try again.');
+      setError(error.response?.data?.error || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleSignUp = async (response) => {
-    console.log('Google response:', response); // Log the full response
-    if (response && response.credential) {
+    if (response?.credential) {
       try {
         setLoading(true);
         const googleResponse = await axios.post('https://hinga-heza-app-1.onrender.com/api/auth/google', {
           token: response.credential,
         });
-        console.log('Google sign-up success:', googleResponse.data); 
-        // Log server response
         localStorage.setItem('token', googleResponse.data.token);
-      
-        navigate('/'); // Redirect to the home page
+        navigate('/'); // Redirect to homepage
       } catch (error) {
-        console.error('Google sign-up failed:', error.message);
+        console.error('Google sign-up failed:', error);
         setError('Google sign-up failed. Please try again.');
       } finally {
         setLoading(false);
       }
     } else {
-      console.error('Google sign-up failed: No credential returned.');
       setError('Google sign-up failed. Please try again.');
     }
   };
-  
-  
 
   return (
     <GoogleOAuthProvider clientId={clientId}>
       <Grid
         container
-        style={{
+        sx={{
           height: '100vh',
-          display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
         <Grid
           container
-          style={{
-            boxShadow: '0px 4px 12px rgba(0,0,0,0.1)',
-            borderRadius: '8px',
-            overflow: 'hidden',
+          sx={{
+            boxShadow: 3,
+            borderRadius: 2,
             maxWidth: '900px',
+            overflow: 'hidden',
           }}
         >
           {/* Left Side */}
@@ -113,41 +112,26 @@ export default function SignUp({ onGoogleLogin }) {
             item
             xs={12}
             sm={6}
-            style={{
+            sx={{
               backgroundColor: '#f4f6f8',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '3em',
+              p: 3,
             }}
           >
             <img
               src="/logo.jpeg"
               alt="Hinga Heza Logo"
-              style={{
-                maxWidth: '60%',
-                height: 'auto',
-                marginBottom: '1em',
-              }}
+              style={{ maxWidth: '60%', height: 'auto', marginBottom: '1em' }}
             />
-            <Typography
-              variant="h5"
-              style={{
-                color: '#388e3c',
-                textAlign: 'center',
-                marginBottom: '1em',
-              }}
-            >
+            <Typography variant="h5" sx={{ color: '#388e3c', textAlign: 'center', mb: 2 }}>
               Welcome to Hinga Heza!
             </Typography>
             <Typography
               variant="body1"
-              style={{
-                textAlign: 'center',
-                marginBottom: '1em',
-                color: '#555',
-              }}
+              sx={{ textAlign: 'center', mb: 2, color: 'text.secondary' }}
             >
               Discover the best agricultural land opportunities in Rwanda. <br />
               Unlock the future of sustainable farming with us!
@@ -155,20 +139,16 @@ export default function SignUp({ onGoogleLogin }) {
           </Grid>
 
           {/* Right Side */}
-          <Grid item xs={12} sm={6} style={{ padding: '3em' }}>
+          <Grid item xs={12} sm={6} sx={{ p: 3 }}>
             <form onSubmit={handleSubmit}>
               <Typography
                 variant="h5"
-                style={{
-                  color: '#388e3c',
-                  marginBottom: '1em',
-                  textAlign: 'center',
-                }}
+                sx={{ color: '#388e3c', mb: 2, textAlign: 'center' }}
               >
                 Create an Account
               </Typography>
               {error && (
-                <Typography color="error" style={{ marginBottom: '1em', textAlign: 'center' }}>
+                <Typography color="error" sx={{ mb: 2, textAlign: 'center' }}>
                   {error}
                 </Typography>
               )}
@@ -231,21 +211,23 @@ export default function SignUp({ onGoogleLogin }) {
                 type="submit"
                 color="success"
                 fullWidth
-                style={{ marginTop: '1em' }}
+                sx={{ mt: 2 }}
                 disabled={loading}
               >
                 Sign Up
               </Button>
               <Divider sx={{ my: 2 }}>or</Divider>
-              <GoogleLogin
-                onSuccess={handleGoogleSignUp}
-                onError={() => setError('Google sign-in failed. Please try again.')}
-                text="signup_with"
-                theme="outline"
-                disabled={loading}
-                style={{ width: '100%', marginTop: '1em' }}
-              />
-              <Typography variant="body2" style={{ marginTop: '1em', textAlign: 'center' }}>
+              {clientId && (
+                <GoogleLogin
+                  onSuccess={handleGoogleSignUp}
+                  onError={() => setError('Google sign-in failed. Please try again.')}
+                  text="signup_with"
+                  theme="outline"
+                  disabled={loading}
+                  style={{ width: '100%' }}
+                />
+              )}
+              <Typography variant="body2" sx={{ mt: 2, textAlign: 'center' }}>
                 Already have an account? <Link href="/login">Log In</Link>
               </Typography>
             </form>
