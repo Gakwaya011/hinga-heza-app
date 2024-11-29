@@ -60,9 +60,14 @@ const loginUser = async (req, res) => {
     }
 
     // Generate a JWT
+    const secret = process.env.JWT_SECRET || 'default_secret'; // Fallback if JWT_SECRET is not set
+    if (secret === 'default_secret') {
+      console.warn('Warning: Using default JWT_SECRET. Please set the JWT_SECRET environment variable.');
+    }
+
     const token = jwt.sign(
       { id: user.id, role: user.role },
-      process.env.JWT_SECRET || 'default_secret', // Fallback if JWT_SECRET is not set
+      secret,
       { expiresIn: '1h' }
     );
 
@@ -103,9 +108,17 @@ const googleSignUp = async (req, res) => {
       });
     }
 
+    // Generate JWT for the user (optional, you can decide if needed)
+    const token = jwt.sign(
+      { id: user.id, role: user.role },
+      process.env.JWT_SECRET || 'default_secret',
+      { expiresIn: '1h' }
+    );
+
     res.status(200).json({
       message: 'User authenticated successfully',
       user: { id: user.id, username: user.username, email: user.email, role: user.role },
+      token,
     });
   } catch (error) {
     console.error("Google Sign-Up Error:", error);
