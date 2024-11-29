@@ -19,12 +19,20 @@ const User = sequelize.define(
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true, // Ensures valid email format
+        isEmail: true, // Validates email format
       },
     },
     password: {
       type: DataTypes.STRING,
+      allowNull: true, // Allow null for Google-authenticated users
+    },
+    role: {
+      type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: "user", // Default to 'user'
+      validate: {
+        isIn: [["user", "admin"]], // Limit roles to specific values
+      },
     },
   },
   {
@@ -33,7 +41,7 @@ const User = sequelize.define(
     underscored: true,
     hooks: {
       beforeCreate: async (user) => {
-        // Automatically hash the password before saving
+        // Automatically hash password before saving
         if (user.password) {
           user.password = await bcrypt.hash(user.password, 10);
         }
