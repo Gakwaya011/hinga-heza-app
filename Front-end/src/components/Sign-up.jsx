@@ -26,7 +26,7 @@ if (!clientId) {
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -49,6 +49,7 @@ export default function SignUp() {
       setError('Passwords do not match');
       return;
     }
+    console.log(formData)
 
     try {
       setLoading(true);
@@ -61,8 +62,10 @@ export default function SignUp() {
         navigate('/'); // Redirect to homepage
       }
     } catch (error) {
-      console.error('Registration failed:', error);
-      setError(error.response?.data?.error || 'Registration failed. Please try again.');
+      console.error('Registration failed:', error.response || error.message);
+      setError(
+        error.response?.data?.error || 'Registration failed. Please try again.'
+      );
     } finally {
       setLoading(false);
     }
@@ -72,13 +75,14 @@ export default function SignUp() {
     if (response?.credential) {
       try {
         setLoading(true);
-        const googleResponse = await axios.post('https://hinga-heza-app-1.onrender.com/api/auth/google', {
-          token: response.credential,
-        });
+        const googleResponse = await axios.post(
+          'https://hinga-heza-app-1.onrender.com/api/auth/google',
+          { token: response.credential }
+        );
         localStorage.setItem('token', googleResponse.data.token);
         navigate('/'); // Redirect to homepage
       } catch (error) {
-        console.error('Google sign-up failed:', error);
+        console.error('Google sign-up failed:', error.response || error.message);
         setError('Google sign-up failed. Please try again.');
       } finally {
         setLoading(false);
@@ -154,9 +158,9 @@ export default function SignUp() {
               )}
               <TextField
                 label="Name"
-                name="name"
+                name="username"
                 type="text"
-                value={formData.name}
+                value={formData.username}
                 onChange={handleChange}
                 fullWidth
                 required
@@ -214,7 +218,7 @@ export default function SignUp() {
                 sx={{ mt: 2 }}
                 disabled={loading}
               >
-                Sign Up
+                {loading ? 'Signing Up...' : 'Sign Up'}
               </Button>
               <Divider sx={{ my: 2 }}>or</Divider>
               {clientId && (
